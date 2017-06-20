@@ -125,7 +125,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void getDataFromIntent() {
-        username = getIntent().getStringExtra("username");
+        username = getIntent().getStringExtra("name");
         text = getIntent().getStringExtra("text");
         message_input_edit.setText(text);
         message_input_edit.setSelection(message_input_edit.getText().length());

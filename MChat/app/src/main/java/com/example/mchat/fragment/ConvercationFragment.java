@@ -197,7 +197,7 @@ public class ConvercationFragment extends MyFragment implements ItemClickListene
         Intent intent = new Intent(getActivity(), MessageActivity.class);
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
         conversation.markAllMessagesAsRead();
-        intent.putExtra("username", username);
+        intent.putExtra("name", username);
         if (!TextUtils.isEmpty(textMap.get(username))) {
             intent.putExtra("text", textMap.get(username));
         }
