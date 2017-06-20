@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <resources>
 
     <!-- Base application theme. -->
@@ -8,4 +9,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MyAppTheme" parent="AppTheme">
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>
