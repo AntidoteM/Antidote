@@ -11,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMMessage;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -50,6 +52,7 @@ public class ConvercationFragment extends MyFragment implements ItemClickListene
     private Map<String, EMConversation> all;
     private HashMap<String, String> textMap = new HashMap<>();
     private Gson gson = new Gson();
+    private EMMessage.ChatType type;
 
 
     @Nullable
@@ -129,6 +132,11 @@ public class ConvercationFragment extends MyFragment implements ItemClickListene
 
     @Override
     public void onClick(int id) {
+        if (list.get(id).getType().equals(EMMessage.ChatType.Chat)) {
+            type = EMMessage.ChatType.Chat;
+        } else if (list.get(id).getType().equals(EMMessage.ChatType.GroupChat)) {
+            type = EMMessage.ChatType.GroupChat;
+        }
         toMessage(list.get(id).getUserName());
     }
 
@@ -198,6 +206,7 @@ public class ConvercationFragment extends MyFragment implements ItemClickListene
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
         conversation.markAllMessagesAsRead();
         intent.putExtra("name", username);
+        intent.putExtra("type", type);
         if (!TextUtils.isEmpty(textMap.get(username))) {
             intent.putExtra("text", textMap.get(username));
         }

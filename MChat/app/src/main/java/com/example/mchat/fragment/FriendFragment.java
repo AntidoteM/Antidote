@@ -32,9 +32,11 @@ public class FriendFragment extends MyFragment implements EMContactListener {
     Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            linearLayoutManager = new LinearLayoutManager(getActivity());
-            friendlist.setLayoutManager(linearLayoutManager);
-            friendlist.setAdapter(new FriendListAdapter(getActivity(), list));
+            switch (msg.what) {
+                case 1:
+                    friendlist.setAdapter(new FriendListAdapter(getActivity(), list));
+                    break;
+            }
         }
     };
 
@@ -47,14 +49,15 @@ public class FriendFragment extends MyFragment implements EMContactListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         friendlist = (RecyclerView) view.findViewById(R.id.friendlist);
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        friendlist.setLayoutManager(linearLayoutManager);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     list = EMClient.getInstance().contactManager().getAllContactsFromServer();
-                    handler.sendEmptyMessage(2);
+                    handler.sendEmptyMessage(1);
                 } catch (HyphenateException e) {
                     e.printStackTrace();
                 }

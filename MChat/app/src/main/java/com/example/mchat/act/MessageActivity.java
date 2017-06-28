@@ -50,9 +50,10 @@ import java.util.List;
 
 import static android.provider.MediaStore.ACTION_VIDEO_CAPTURE;
 
-public class MessageActivity extends AppCompatActivity implements View.OnClickListener, EMMessageListener, TextWatcher, View.OnLayoutChangeListener {
+public class MessageActivity extends BaseActivity implements View.OnClickListener, EMMessageListener, TextWatcher, View.OnLayoutChangeListener {
     private String username;
     private String text;
+    private EMMessage.ChatType chatType;
     private List<EMMessage> messages;
     private MessageAdapter messageAdapter;
 
@@ -79,6 +80,10 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         setEnble();
         messages = getAllMessages();
         initListView();
+        initListener();
+    }
+
+    private void initListener() {
         message_send_btn.setOnClickListener(this);
         message_image_btn.setOnClickListener(this);
         message_voice_btn.setOnClickListener(this);
@@ -93,7 +98,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     private void initListView() {
         messageAdapter = new MessageAdapter(this, messages, username);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-//        layoutManager.setStackFromEnd(true);
+//layoutManager.setStackFromEnd(true);
         message_content_list.setLayoutManager(layoutManager);
         message_content_list.setAdapter(messageAdapter);
     }
@@ -126,6 +131,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
     private void getDataFromIntent() {
         username = getIntent().getStringExtra("name");
+        chatType = getIntent().getParcelableExtra("type");
         text = getIntent().getStringExtra("text");
         message_input_edit.setText(text);
         message_input_edit.setSelection(message_input_edit.getText().length());
@@ -156,7 +162,13 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                 onBackPressed();
                 return true;
             case R.id.item1:
-                Toast.makeText(this, "item1", Toast.LENGTH_SHORT).show();
+                Intent intent;
+                if (chatType.equals(EMMessage.ChatType.GroupChat)) {
+                    intent = new Intent(this, GroupInfoActivity.class);
+                } else if (chatType.equals(EMMessage.ChatType.Chat)) {
+                    intent = new Intent(this, FriendInfoActivity.class);
+                }
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -183,7 +195,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                 hideKeyboard();
                 EMMessage msg = MessageManager
                         .getInsatance()
-                        .createTxt(text, username, EMMessage.ChatType.Chat);
+                        .createTxt(text, username, chatType);
                 notifyMsg(msg);
                 message_input_edit.setText("");
                 break;
@@ -312,7 +324,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case 1010:
-                    EMMessage msg = MessageManager.getInsatance().createVideo(this, data, username, EMMessage.ChatType.Chat);
+                    EMMessage msg = MessageManager.getInsatance().createVideo(this, data, username, chatType);
                     notifyMsg(msg);
                     break;
             }
@@ -322,12 +334,12 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     public void createImage(String path) {
         EMMessage msg = MessageManager
                 .getInsatance()
-                .createImage(path, username, false, EMMessage.ChatType.Chat);
+                .createImage(path, username, false, chatType);
         notifyMsg(msg);
     }
 
     public void createVoice(String fileName, int audioTime) {
-        EMMessage msg = MessageManager.getInsatance().createAudio(fileName, audioTime, username, EMMessage.ChatType.Chat);
+        EMMessage msg = MessageManager.getInsatance().createAudio(fileName, audioTime, username, chatType);
         notifyMsg(msg);
     }
 

@@ -54,21 +54,27 @@
         </receiver>
 
         <activity
-        android:name=".act.SplashActivity"
-        android:theme="@style/MyAppTheme">
+            android:name=".act.SplashActivity"
+            android:theme="@style/MyAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".act.MainActivity"
-            android:windowSoftInputMode="adjustResize"
-            />
+        <activity
+            android:name=".act.MainActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".act.LoginActivity" />
         <activity android:name=".act.RegisterActivity" />
-        <activity android:name=".act.MessageActivity" android:parentActivityName=".act.MainActivity"/>
-        <activity android:name=".act.VideoActivity" android:theme="@style/MyAppTheme"/>
+        <activity
+            android:name=".act.MessageActivity"
+            android:parentActivityName=".act.MainActivity" />
+        <activity
+            android:name=".act.VideoActivity"
+            android:theme="@style/MyAppTheme" />
+        <activity android:name=".act.GroupInfoActivity" />
+        <activity android:name=".act.FriendInfoActivity"></activity>
     </application>
 
 </manifest>

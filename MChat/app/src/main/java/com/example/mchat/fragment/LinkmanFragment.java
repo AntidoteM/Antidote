@@ -1,5 +1,6 @@
 package com.example.mchat.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -9,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.example.mchat.R;
@@ -43,7 +45,7 @@ public class LinkmanFragment extends MyFragment {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
         initFragment();
-
+        hidso();
         fragmentPagerAdapter = new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public int getCount() {
@@ -63,6 +65,11 @@ public class LinkmanFragment extends MyFragment {
         link_vp.setAdapter(fragmentPagerAdapter);
         link_vp.setOffscreenPageLimit(2);
         userconnect.setupWithViewPager(link_vp);
+    }
+
+    private void hidso() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(search_user.getWindowToken(), 0);
     }
 
     private void initFragment() {
